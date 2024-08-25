@@ -1,22 +1,26 @@
-/* src/global.css */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Your global styles here */
 body {
-  margin: 0;
+  margin: 0px 25px 25px 25px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(252, 229, 237);
+
+ 
+}
+
+@media (max-width: 768px) {
+  body {
+   margin: 0px 30px 30px 30px;
+  }
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
- 

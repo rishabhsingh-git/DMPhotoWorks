@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import DMLogo from "../../assets/DMLogo.png";
 
 const Navbar = () => {
@@ -10,97 +10,78 @@ const Navbar = () => {
 
   return (
     <div className="relative z-50">
-      <nav className="flex flex-col md:flex-row items-center justify-center p-4">
-        {/* Logo */}
-        <div className="relative mb-4 md:mb-0 flex items-center justify-center">
+      <nav className="flex flex-col md:flex-row items-center justify-between p-4">
+        <div className="flex items-center justify-between w-full">
           <img
             src={DMLogo}
             alt="My Logo"
-            className={`w-23 h-25 md:w-38 md:h-38 lg:w-80 lg:h-80 ${isMenuOpen ? 'md:hidden' : 'md:block'}`}
-            style={{ height: 'auto' }}
+            className="w-24 h-16 md:w-34 md:h-16 lg:w-40 lg:h-24"
+            style={{ height: "auto" }}
           />
+
+          <button
+            className="block md:hidden px-4 py-2 hover:bg-blue-50 rounded"
+            onClick={toggleMenu}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
         </div>
 
-        {/* Hamburger Menu Icon */}
-        <button
-          className="block md:hidden px-4 py-2 text-black hover:bg-blue-50 rounded"
-          onClick={toggleMenu}
+        <ul
+          className={`flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 list-none p-0 ${
+            isMenuOpen ? "block" : "hidden"
+          } md:flex`}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-          </svg>
-        </button>
-
-        {/* Navlinks */}
-        <ul className={`flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 list-none p-0 ${isMenuOpen ? 'block' : 'hidden'} md:flex`}>
-          <li>
-            <a
-              className="block p-4 text-black"
-              href="portfolio"
-              style={{
-                fontFamily: 'ui-monospace',
-                fontWeight: 300,
-                fontStyle: 'normal',
-                fontSize: '18px',
-                lineHeight: '1.8em',
-                letterSpacing: '.05em',
-                textRendering: 'optimizeLegibility'
-              }}
-            >
-              Portfolio
-            </a>
-          </li>
-          <li>
-            <a
-              className="block p-4 text-black"
-              href="video"
-              style={{
-                fontFamily: 'ui-monospace',
-                fontWeight: 300,
-                fontStyle: 'normal',
-                fontSize: '18px',
-                lineHeight: '1.8em',
-                letterSpacing: '.05em',
-                textRendering: 'optimizeLegibility'
-              }}
-            >
-              Video
-            </a>
-          </li>
-          <li>
-            <a
-              className="block p-4 text-black"
-              href="about&contact"
-              style={{
-                fontFamily: 'ui-monospace',
-                fontWeight: 300,
-                fontStyle: 'normal',
-                fontSize: '18px',
-                lineHeight: '1.8em',
-                letterSpacing: '.05em',
-                textRendering: 'optimizeLegibility'
-              }}
-            >
-              About & Contact
-            </a>
-          </li>
-          <li>
-            <a
-              className="block p-4 text-lg text-black"
-              href="admin"
-              style={{
-                fontFamily: 'ui-monospace',
-                fontWeight: 300,
-                fontStyle: 'normal',
-                fontSize: '18px',
-                lineHeight: '1.8em',
-                letterSpacing: '.05em',
-                textRendering: 'optimizeLegibility'
-              }}
-            >
-              Admin
-            </a>
-          </li>
+          {["Home", "Portfolio", "Video", "About & Contact", "Admin"].map(
+            (text, index) => (
+              <button
+                key={index}
+                type="button"
+                className="text-white bg-gray-800 rounded-full"
+                style={{
+                  padding: "8px 16px",
+                  fontSize: "14px",
+                  lineHeight: "1.6em",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <a
+                  href={
+                    text === "Home"
+                      ? "/"
+                      : text
+                          .toLowerCase()
+                          .replace(/ & /g, "")
+                          .replace(/\s/g, "")
+                  }
+                  target={text === "Admin" ? "_self" : "_self"}
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: "ui-monospace",
+                    fontWeight: 300,
+                    fontStyle: "normal",
+                    letterSpacing: ".05em",
+                    textRendering: "optimizeLegibility",
+                  }}
+                >
+                  {text}
+                </a>
+              </button>
+            )
+          )}
         </ul>
       </nav>
     </div>

@@ -1,0 +1,17 @@
+.admin-layout {
+    display: flex;
+  }
+  
+  .side-navbar {
+    width: 250px;
+    background-color: #ac0000;
+    height: 100vh; /* Ensure the sidebar spans the full height */
+    position: fixed; /* Fix sidebar position */
+  }
+  
+  .admin-content {
+    flex-grow: 1;
+    margin-left: 250px; /* Add margin to the left equal to the sidebar width */
+    padding: 20px;
+  }
+  

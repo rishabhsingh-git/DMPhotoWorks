@@ -1,11 +1,16 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom'; 
+import SideNavbar from '../Sidebar/SideNavbar';
+import "./Admin.css"
 
 
 const Admin = () => {
   return (
-    <div className="Admin">
-      <h1>Welcome to the Admin Page</h1>
-      <p>This is the Admin screen content.</p>
+    <div className="admin-layout">
+      <SideNavbar />
+      <main className="admin-content">
+        <Outlet /> 
+      </main>
     </div>
   );
 };
