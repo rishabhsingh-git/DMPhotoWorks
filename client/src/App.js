@@ -1,10 +1,21 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { Home, Navbar, AboutContact, Portfolio, Admin, ManageAssets } from "./components/index";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import {
+  Home,
+  Navbar,
+  AboutContact,
+  Portfolio,
+  Admin,
+  ManageAssets,
+} from "./components/index";
 
 function App() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.includes("/admin")
-  console.log(`==========================>`,isAdminRoute)
+  const isAdminRoute = location.pathname.includes("/admin");
 
   return (
     <div>

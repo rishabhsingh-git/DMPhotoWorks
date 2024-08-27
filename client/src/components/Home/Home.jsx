@@ -2,12 +2,12 @@ import React from "react";
 import Sample from "../../assets/Sample.jpg";
 import Sample2 from "../../assets/Sample2.JPG";
 import Sample3 from "../../assets/Sample3.jpg";
-import Sample4 from "../../assets/Sample4.jpg";
+
 import Sample1 from "../../assets/Sample1.jpg";
 import Carousel from "../carousel/Carousel";
 
 const Home = () => {
-  const images = [Sample, Sample1, Sample4, Sample2, Sample3];
+  const images = ["https://ik.imagekit.io/suzadkq6a/Sample_5m4vZCXdP.jpg"];
   return (
     <div>
       {/* <div role="status" class="flex items-center justify-center h-56 max-w-sm bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700">

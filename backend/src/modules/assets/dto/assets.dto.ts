@@ -14,6 +14,8 @@ export class AssetsDto {
   fileType: string;
 
   @IsNotEmpty()
-  @IsEnum(["Home", "Wedding", "Birthday", "Pre-Wedding", "Outdoor"])
+  @IsEnum(['Home', 'Wedding', 'Birthday', 'Pre-Wedding', 'Outdoor'])
   category: string;
+
+  title: string;
 }

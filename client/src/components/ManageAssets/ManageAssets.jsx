@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CATEGORY_CONSTANTS } from "../../common/constant";
+import { uploadAssets } from "../../store/assetsReducer";
 
 const ManageAssets = () => {
   const [file, setFile] = useState(null);
@@ -8,14 +9,13 @@ const ManageAssets = () => {
   const [title, setTitle] = useState("");
   const [imagePreview, setImagePreview] = useState("");
 
-  // const dispatch = useDispatch();
-  // const { status, error } = useSelector((state) => state.upload);
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.upload);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
 
-    // Create a URL for the selected image file and update the state
     if (selectedFile) {
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
@@ -23,7 +23,7 @@ const ManageAssets = () => {
       };
       fileReader.readAsDataURL(selectedFile);
     } else {
-      setImagePreview(""); // Clear the preview if no file is selected
+      setImagePreview("");
     }
   };
 
@@ -40,12 +40,11 @@ const ManageAssets = () => {
 
     if (file && category && title) {
       const formData = new FormData();
-
       formData.append("file", file);
       formData.append("category", category);
       formData.append("title", title);
-
-      // dispatch(uploadAssets(formData));
+      dispatch(uploadAssets(formData));
+      handleReset();
     }
   };
 
@@ -54,8 +53,6 @@ const ManageAssets = () => {
     setCategory("");
     setTitle("");
     setImagePreview("");
-
-    // Clear the file input value
     document.getElementById("user_avatar").value = "";
   };
 

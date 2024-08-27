@@ -1,5 +1,11 @@
 // src/assets/assets.controller.ts
-import { Controller, Post, UploadedFile, UseInterceptors, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  Body,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AssetsService } from './assets.service';
 
@@ -11,9 +17,9 @@ export class AssetsController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @Body('category') category: string, title:string
+    @Body('category') category: string,
+    @Body('title') title: string,
   ) {
     return this.assetsService.uploadFile(file, category, title);
   }
-
 }
