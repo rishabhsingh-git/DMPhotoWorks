@@ -8,8 +8,7 @@ export class DropboxService {
 
   constructor() {
     this.dbx = new Dropbox({
-      accessToken:
-        'sl.B76bG_O3HZPV7T3Kt0xGJXBbyMiVQQX8MP6_HIeIr9VG0n6uE6O1NY9g3lwhX7KerRqv92K35ciOrWtgpYcADQnLkJYhvtpQ-JKRVba5zHyjMvqSMPWc9NcRjDX68_ukcxRDwPn0qJvkLwQqridi',
+      accessToken: process.env.accessToken,
       fetch: fetch,
     });
   }
