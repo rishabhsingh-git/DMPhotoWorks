@@ -5,6 +5,7 @@ import axios from "axios";
 export const uploadAssets = createAsyncThunk(
   "assets/upload",
   async (formData) => {
+    console.log(`================================>`, formData);
     const response = await axios.post(
       "http://localhost:4000/api/assets/upload",
       formData,

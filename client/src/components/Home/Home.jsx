@@ -2,12 +2,21 @@ import React from "react";
 import Sample from "../../assets/Sample.jpg";
 import Sample2 from "../../assets/Sample2.JPG";
 import Sample3 from "../../assets/Sample3.jpg";
-
 import Sample1 from "../../assets/Sample1.jpg";
 import Carousel from "../carousel/Carousel";
 
 const Home = () => {
-  const images = ["https://ik.imagekit.io/suzadkq6a/Sample_5m4vZCXdP.jpg"];
+  const images = [
+    // "https://dl.dropboxusercontent.com/scl/fi/t8eocerhb28hajzjj0y5u/Sample.jpg?rlkey=2rieqd5uhza2sxxvqwsrh3b8l&dl=0",
+    // "https://dl.dropboxusercontent.com/scl/fi/n73bp6408e6zn1zqvdju7/Sample1.jpg?rlkey=24eo1b4omhxvw56yw5i8rdlvt&dl=0",
+    // "https://dl.dropboxusercontent.com/scl/fi/rnz1divvgzded7fh0zgc9/CBD09576.jpg?rlkey=cujz3uqtuv1qg467uxv4ytmxh&dl=0",
+    // "https://dl.dropboxusercontent.com/scl/fi/h9dq6wu8mrtu4rgwcquer/CBD09257.JPG?rlkey=qcwwoa16g22gqt7nkctdopful&dl=0",
+
+    // "https://dl.dropboxusercontent.com/scl/fi/ymtyzpuvcfnzdprmb7376/Untitled-1.jpg?rlkey=ilyzzo7kci9o5j1xekoffjqnw&dl=0",
+    "https://dl.dropboxusercontent.com/scl/fi/m6vowyo8v8ak61tpp7nar/CBD09576.jpg?rlkey=wszc3btuwcdkkpmp5pf3z5cnw&dl=0",
+    "https://dl.dropboxusercontent.com/scl/fi/07mg3habim3uw0q1x3tpu/pexels-giorgio-de-angelis-482403-1413412.jpg?rlkey=c6w41p3hwh643rjge2qc4of8m&dl=0",
+    "https://dl.dropboxusercontent.com/scl/fi/db1hpkqxyryhx587zn8fq/pexels-optical-chemist-340351297-15587985.jpg?rlkey=ss01c6z5i65z0cjszqokwjqo4&dl=0",
+  ];
   return (
     <div>
       {/* <div role="status" class="flex items-center justify-center h-56 max-w-sm bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700">

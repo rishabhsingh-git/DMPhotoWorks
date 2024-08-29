@@ -44,7 +44,7 @@ const Carousel = ({ images, autoScroll = true, interval = 3000 }) => {
     const intervalId = setInterval(goToNext, interval);
 
     return () => clearInterval(intervalId); // Cleanup the interval on component unmount
-  }, [currentIndex, autoScroll, interval]);
+  }, [currentIndex, autoScroll, interval, images]);
 
   return (
     <div className="carousel">
