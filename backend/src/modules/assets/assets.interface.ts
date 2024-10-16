@@ -12,8 +12,8 @@ export interface Assets {
   assets: AssetModel;
 }
 
-interface AssetModel {
-  _id: ObjectId;
+export interface AssetModel {
+
   filename: string;
   url: string;
   fileType: string;
@@ -26,4 +26,9 @@ export interface CustomResponse {
   success: boolean;
   data?: Assets;
   message?: string;
+}
+
+export interface AssetsUpload {
+  status: number,
+  message: string
 }

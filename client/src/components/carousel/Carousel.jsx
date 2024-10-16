@@ -5,77 +5,124 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import "./carousel.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllAssets, clearUploadStatus } from "../../store/assetsReducer";
+import { Toaster, Skeleton } from "../../shared/index";
 
-const Carousel = ({ images, autoScroll = true, interval = 3000 }) => {
+const Carousel = ({ autoScroll = true, interval = 2000 }) => {
+  const [isToastVisible, setShowToaster] = useState(false);
+  const [toasterMessage, setShowToasterMesssage] = useState("");
+
+  const dispatch = useDispatch();
+  const { assetsData, error, isAllAssetsLoading, isAllAssetsSuccess } =
+    useSelector((state) => state.assets);
+
+  let filteredData = assetsData?.filter(
+    (val) => val?.category === "Carousel Image"
+  );
+
+  useEffect(() => {
+    dispatch(fetchAllAssets({ category: ["Carousel Image", "Home Screen"] }));
+  }, [dispatch]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
-  const goToPrevious = () => {
+  const changeImage = (newIndex) => {
     setIsFading(true);
     setTimeout(() => {
-      const isFirstSlide = currentIndex === 0;
-      const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
       setCurrentIndex(newIndex);
       setIsFading(false);
     }, 300);
+  };
+
+  const goToPrevious = () => {
+    const newIndex =
+      currentIndex === 0 ? filteredData.length - 1 : currentIndex - 1;
+    changeImage(newIndex);
   };
 
   const goToNext = () => {
-    setIsFading(true);
-    setTimeout(() => {
-      const isLastSlide = currentIndex === images.length - 1;
-      const newIndex = isLastSlide ? 0 : currentIndex + 1;
-      setCurrentIndex(newIndex);
-      setIsFading(false);
-    }, 300);
+    const newIndex =
+      currentIndex === filteredData.length - 1 ? 0 : currentIndex + 1;
+    changeImage(newIndex);
   };
 
   const goToSlide = (slideIndex) => {
-    setIsFading(true);
-    setTimeout(() => {
-      setCurrentIndex(slideIndex);
-      setIsFading(false);
-    }, 300);
+    changeImage(slideIndex);
   };
 
   useEffect(() => {
     if (!autoScroll) return;
 
     const intervalId = setInterval(goToNext, interval);
+    return () => clearInterval(intervalId);
+  }, [currentIndex, autoScroll, interval]);
 
-    return () => clearInterval(intervalId); // Cleanup the interval on component unmount
-  }, [currentIndex, autoScroll, interval, images]);
+  useEffect(() => {
+    if (error?.isError) {
+      setShowToaster(true);
+      setShowToasterMesssage(error?.message);
+    }
+  }, [error?.isError]);
+
+  const handleToasterClose = () => {
+    setShowToaster(false);
+    setShowToasterMesssage("");
+    dispatch(clearUploadStatus(""));
+  };
+
+  const renderLoading = () => {
+    if (isAllAssetsLoading) {
+      return true;
+    }
+  };
 
   return (
-    <div className="carousel">
-      <div className={`carousel-inner ${isFading ? "fading" : ""}`}>
-        <img
-          src={images[currentIndex]}
-          alt="carousel"
-          className="carousel-image"
-        />
-      </div>
-      <button
-        onClick={goToPrevious}
-        className="carousel-button carousel-button-left"
-      >
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
-      <button
-        onClick={goToNext}
-        className="carousel-button carousel-button-right"
-      >
-        <FontAwesomeIcon icon={faChevronRight} />
-      </button>
-      <div className="carousel-dots">
-        {images.map((_, index) => (
+    <div>
+      {!renderLoading() && assetsData?.length ? (
+        <div className="carousel">
+          <div className={`carousel-inner ${isFading ? "fading" : ""}`}>
+            <img
+              src={filteredData[currentIndex]?.url}
+              alt="carousel"
+              className="carousel-image"
+            />
+          </div>
           <button
-            key={index}
-            className={`carousel-dot ${currentIndex === index ? "active" : ""}`}
-            onClick={() => goToSlide(index)}
-          ></button>
-        ))}
-      </div>
+            onClick={goToPrevious}
+            className="carousel-button carousel-button-left"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          <button
+            onClick={goToNext}
+            className="carousel-button carousel-button-right"
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+          <div className="carousel-dots">
+            {filteredData.map((_, index) => (
+              <button
+                key={index}
+                className={`carousel-dot ${
+                  currentIndex === index ? "active" : ""
+                }`}
+                onClick={() => goToSlide(index)}
+              ></button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <Skeleton width={"100%"} height={"100vh"} borderRadius={"40px"} />
+      )}
+      {isToastVisible ? (
+        <Toaster
+          isFailure={error?.isError}
+          message={toasterMessage}
+          onClose={handleToasterClose}
+        />
+      ) : null}
     </div>
   );
 };

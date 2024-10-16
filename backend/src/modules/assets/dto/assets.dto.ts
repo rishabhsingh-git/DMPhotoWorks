@@ -19,3 +19,10 @@ export class AssetsDto {
 
   title: string;
 }
+
+
+export class getAllItemDto {
+  @IsNotEmpty()
+  @IsString()
+  category: [];
+}

@@ -3,6 +3,6 @@ import uploadReducer from "./assetsReducer";
 
 export const store = configureStore({
   reducer: {
-    upload: uploadReducer,
+    assets: uploadReducer,
   },
 });
