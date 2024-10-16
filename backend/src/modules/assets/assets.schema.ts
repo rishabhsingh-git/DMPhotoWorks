@@ -11,13 +11,12 @@ export const AssetsSchema = new Schema({
   },
   fileType: {
     type: String,
-    enum: ['image', 'video'],
     required: true,
   },
   category: {
     type: String,
     enum: [
-      'Home',
+      'Home Screen',
       'Wedding',
       'Birthday',
       'Pre-Wedding',
