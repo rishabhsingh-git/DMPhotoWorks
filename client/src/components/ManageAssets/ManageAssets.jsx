@@ -1,16 +1,34 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CATEGORY_CONSTANTS } from "../../common/constant";
 import { uploadAssets } from "../../store/assetsReducer";
+=======
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CATEGORY_CONSTANTS } from "../../common/constant";
+import { uploadAssets, clearUploadStatus } from "../../store/assetsReducer";
+import { Toaster, UploadLoader } from "../../shared/index";
+>>>>>>> 00d8ac8 (feature s3 bucket uopload added)
 
 const ManageAssets = () => {
   const [file, setFile] = useState(null);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+<<<<<<< HEAD
 
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.upload);
+=======
+  const [isToastVisible, setShowToaster] = useState(false);
+  const [toasterMessage, setShowToasterMesssage] = useState("");
+
+  const dispatch = useDispatch();
+  const { isLoading, isSuccess, uploadStatus, isError } = useSelector(
+    (state) => state.assets
+  );
+>>>>>>> 00d8ac8 (feature s3 bucket uopload added)
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -56,6 +74,18 @@ const ManageAssets = () => {
     document.getElementById("user_avatar").value = "";
   };
 
+  useEffect(() => {
+    if (isError || isSuccess) {
+      setShowToaster(true);
+      setShowToasterMesssage(uploadStatus);
+    }
+  }, [isError, isSuccess]);
+
+  const handleToasterClose = () => {
+    setShowToaster(false);
+    setShowToasterMesssage("");
+    dispatch(clearUploadStatus(""));
+  };
   return (
     <div className="max-w-lg mx-auto mt-10">
       <div className="dark:bg-gray-800 shadow-md rounded-lg p-6">
@@ -85,7 +115,7 @@ const ManageAssets = () => {
               <img
                 src={imagePreview}
                 alt="Preview"
-                className="w-full h-auto rounded-lg shadow-md"
+                className="w-full h-52 rounded-lg shadow-md"
               />
             </div>
           )}
@@ -133,13 +163,21 @@ const ManageAssets = () => {
           </div>
 
           <div className="flex gap-4">
-            <button
-              type="submit"
-              disabled={!file || !category || !title}
-              className="flex-1 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Submit
-            </button>
+            {isLoading ? (
+              <UploadLoader />
+            ) : (
+              <button
+                type="submit"
+                disabled={!file || !category || !title}
+                className={`flex-1 text-white ${
+                  !file
+                    ? "bg-gray-600 hover:bg-gray-700"
+                    : "bg-blue-600 hover:bg-blue-700"
+                } focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center`}
+              >
+                Submit
+              </button>
+            )}
             <button
               type="button"
               onClick={handleReset}
@@ -149,6 +187,14 @@ const ManageAssets = () => {
             </button>
           </div>
         </form>
+        {isToastVisible ? (
+          <Toaster
+            isSuccess={isSuccess}
+            isFailure={isError}
+            message={toasterMessage}
+            onClose={handleToasterClose}
+          />
+        ) : null}
       </div>
     </div>
   );

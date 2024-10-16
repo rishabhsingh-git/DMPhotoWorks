@@ -1,5 +1,5 @@
 export const CATEGORY_CONSTANTS = [
-  "Home",
+  "Home Screen",
   "Wedding",
   "Birthday",
   "Pre-Wedding",

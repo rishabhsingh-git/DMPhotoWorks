@@ -1,49 +1,103 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Assets } from './assets.interface';
-import { DropboxService } from '../../shared/dropbox/dropbox.service';
+import { AssetModel, Assets, AssetsUpload } from './assets.interface';
+import { S3Service } from '../../shared/s3/s3.service';
+import { getAllItemDto } from './dto/assets.dto';
+
 
 @Injectable()
 export class AssetsService {
   constructor(
-    private readonly dropboxService: DropboxService,
+    private readonly s3: S3Service,
     @InjectModel('Assets') private readonly assetsModel: Model<Assets>,
-  ) {}
+  ) { }
 
   async uploadFile(
     file: Express.Multer.File,
     category: string,
     title: string,
-  ): Promise<Assets> {
+  ): Promise<AssetsUpload> {
     try {
-      const { buffer, originalname } = file;
 
-      let dropBoxResult = await this.dropboxService.dropBoxService(
+      if (!file || !category || !title) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: "Please provide valid request parameters"
+          },
+          HttpStatus.BAD_REQUEST
+        )
+      }
+
+      const { buffer, originalname, mimetype } = file;
+
+      let s3ResponseUrl = await this.s3.uploadFile(
         buffer,
         originalname,
       );
 
-      console.log(`==========================> In teh service`, dropBoxResult);
-      return;
-      const asset = new this.assetsModel({
-        // // filename: originalname,
-        // url: imagekitResult?.url,
-        // fileType: imagekitResult?.fileType,
-        // category,
-        // title,
-        // uploadedAt: new Date(),
-      });
+      if (s3ResponseUrl) {
+        const asset = new this.assetsModel({
+          filename: originalname,
+          url: s3ResponseUrl,
+          fileType: mimetype,
+          category,
+          title,
+          uploadedAt: new Date(),
+        });
 
-      asset.save();
-      return asset;
+        asset.save();
+        return {
+          status: 200,
+          message: "ASSET UPLOAD SUCCESS"
+        }
+      }
+
     } catch (error) {
-      console.log(`ERROR WHILE UPL0DING`, error);
-      return;
+      Logger.error('ERROR WHILE UPLOADING ASSET TO CLOUD:', error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+          message: "ERROR WHILE UPL0DAING ASSET TO CLOUD"
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  async findAll(): Promise<Assets[]> {
-    return this.assetsModel.find().exec();
+  async getAll(
+    query: getAllItemDto
+  ): Promise<AssetModel[]> {
+    try {
+      const { category } = query
+      if (!category) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: "Please provide valid category"
+
+          },
+          HttpStatus.BAD_REQUEST
+        )
+      }
+      const filter: any = {};
+      if (category) {
+        filter.category = { $in: category };
+      }
+      return this.assetsModel.find(filter).lean().exec();
+
+    } catch (error) {
+      Logger.error('ERROR WHILE FETCHING ASSETS:', error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: error,
+          message: "ERROR WHILE FETCHING ASSETS"
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

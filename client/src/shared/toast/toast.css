@@ -1,0 +1,11 @@
+.toast-Header {
+  position: fixed;
+  top: 6px;
+  right: 6px;
+  max-width: 500px;
+  width: auto;
+}
+
+.toast-textWrap {
+  white-space: nowrap;
+}

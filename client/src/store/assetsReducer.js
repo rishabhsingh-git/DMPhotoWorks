@@ -1,47 +1,105 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../common/common";
-import axios from "axios";
 
 export const uploadAssets = createAsyncThunk(
   "assets/upload",
-  async (formData) => {
-    console.log(`================================>`, formData);
-    const response = await axios.post(
-      "http://localhost:4000/api/assets/upload",
-      formData,
-      {
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await api.post("api/assets/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue({
+          ...error.response.data,
+          status: error.response.status,
+        });
+      } else {
+        return rejectWithValue(error.message);
       }
-    );
-    console.log(`================================>`, response);
-    return response;
+    }
   }
 );
 
-const uploadSlice = createSlice({
-  name: "upload",
+export const fetchAllAssets = createAsyncThunk(
+  "assets/fetchAll",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await api.get("api/assets/", {
+        params: query,
+      });
+
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue({
+          ...error.response.data,
+          status: error.response.status,
+        });
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+const uploadAssetSlice = createSlice({
+  name: "assets",
   initialState: {
-    status: "idle",
-    error: null,
-    imageUrl: null,
+    isLoading: false,
+    isSuccess: false,
+    isError: false,
+    uploadStatus: "",
+    isAllAssetsLoading: false,
+    isAllAssetsSuccess: false,
+    assetsData: [],
+    error: {
+      isError: false,
+      message: "",
+    },
   },
-  reducers: {},
+  reducers: {
+    clearUploadStatus: (state, action) => {
+      state.uploadStatus = "";
+      state.isSuccess = false;
+      state.isError = false;
+      state.error.isError = false;
+      state.error.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(uploadAssets.pending, (state) => {
-        state.status = "loading";
+        state.isLoading = true;
       })
       .addCase(uploadAssets.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.imageUrl = action.payload.url;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.uploadStatus = action.payload?.message;
       })
       .addCase(uploadAssets.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
+        state.isLoading = false;
+        state.isError = true;
+        state.uploadStatus = action.payload?.message;
+      })
+      .addCase(fetchAllAssets.pending, (state) => {
+        state.isAllAssetsLoading = true;
+      })
+      .addCase(fetchAllAssets.fulfilled, (state, action) => {
+        state.isAllAssetsLoading = false;
+        state.isAllAssetsSuccess = true;
+        state.assetsData = action.payload;
+      })
+      .addCase(fetchAllAssets.rejected, (state, action) => {
+        state.isAllAssetsLoading = true;
+        state.error.isError = true;
+        state.error.message = action.payload?.message;
       });
   },
 });
 
-export default uploadSlice.reducer;
+export const { clearUploadStatus } = uploadAssetSlice.actions;
+export default uploadAssetSlice.reducer;
