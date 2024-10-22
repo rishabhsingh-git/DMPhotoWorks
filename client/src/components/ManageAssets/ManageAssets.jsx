@@ -1,26 +1,14 @@
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { CATEGORY_CONSTANTS } from "../../common/constant";
-import { uploadAssets } from "../../store/assetsReducer";
-=======
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CATEGORY_CONSTANTS } from "../../common/constant";
 import { uploadAssets, clearUploadStatus } from "../../store/assetsReducer";
 import { Toaster, UploadLoader } from "../../shared/index";
->>>>>>> 00d8ac8 (feature s3 bucket uopload added)
 
 const ManageAssets = () => {
   const [file, setFile] = useState(null);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-<<<<<<< HEAD
-
-  const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.upload);
-=======
   const [isToastVisible, setShowToaster] = useState(false);
   const [toasterMessage, setShowToasterMesssage] = useState("");
 
@@ -28,7 +16,6 @@ const ManageAssets = () => {
   const { isLoading, isSuccess, uploadStatus, isError } = useSelector(
     (state) => state.assets
   );
->>>>>>> 00d8ac8 (feature s3 bucket uopload added)
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];

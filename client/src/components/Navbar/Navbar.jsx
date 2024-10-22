@@ -1,24 +1,33 @@
 import React, { useState } from "react";
 import DMLogo from "../../assets/DMLogo.png";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  let [counter, setCounter] = useState(0);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  const navigate = useNavigate();
+  const handleAdminNavigation = () => {
+    setCounter(counter++);
+    if (counter > 1) {
+      false ? navigate("/admin-dashboard") : navigate("/admin-signin");
+    }
+  };
   return (
     <div className="relative z-50">
       <nav className="flex flex-col md:flex-row items-center justify-between p-4">
         <div className="flex items-center justify-between w-full">
-          <img
-            src={DMLogo}
-            alt="My Logo"
-            className="w-24 h-16 md:w-34 md:h-16 lg:w-40 lg:h-24"
-            style={{ height: "auto" }}
-          />
-
+          <button onClick={() => handleAdminNavigation()}>
+            <img
+              src={DMLogo}
+              alt="My Logo"
+              className="w-24 h-16 md:w-34 md:h-16 lg:w-40 lg:h-24"
+              style={{ height: "auto" }}
+            />
+          </button>
           <button
             className="block md:hidden px-4 py-2 hover:bg-blue-50 rounded"
             onClick={toggleMenu}
@@ -45,7 +54,7 @@ const Navbar = () => {
             isMenuOpen ? "block" : "hidden"
           } md:flex`}
         >
-          {["Home", "Portfolio", "Video", "About & Contact", "Admin"].map(
+          {["Home", "Portfolio", "Video", "About & Contact"].map(
             (text, index) => (
               <button
                 key={index}
@@ -64,10 +73,10 @@ const Navbar = () => {
                       ? "/"
                       : text
                           .toLowerCase()
-                          .replace(/ & /g, "")
+                          .replace(/ & /g, "-")
                           .replace(/\s/g, "")
                   }
-                  target={text === "Admin" ? "_self" : "_self"}
+                  target={"_self"}
                   rel="noopener noreferrer"
                   style={{
                     fontFamily: "ui-monospace",
