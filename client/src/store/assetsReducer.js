@@ -6,6 +6,7 @@ export const uploadAssets = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await api.post("api/assets/upload", formData, {
+        withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
         },

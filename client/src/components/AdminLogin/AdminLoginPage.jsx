@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 import SignInImg from "../../assets/SignInPageImg.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { createLogin } from "../../store/authReducer";
+import { useEffect } from "react";
+import { getAllCookies } from "../../common/common";
+import { Toaster } from "../../shared";
+import { clearLoginMessage } from "../../store/authReducer";
+import { useNavigate } from "react-router-dom";
 
 export const AdminLoginPage = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +16,12 @@ export const AdminLoginPage = () => {
   const [isOTPLogin, setOTPLogin] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isToastVisible, setShowToaster] = useState(false);
+  const [toasterMessage, setShowToasterMesssage] = useState("");
+
+  const { status, error, message, isSuccess } = useSelector(
+    (state) => state.auth
+  );
 
   const validateInputs = () => {
     if (!mobileNumber && (!password || !username)) {
@@ -17,12 +30,14 @@ export const AdminLoginPage = () => {
     if (mobileNumber && (password || username)) {
       return "Please choose a single login method.";
     }
-    if (mobileNumber.length !== 10) {
+    if ((!username || !password) && mobileNumber.length !== 10) {
       return "Please enter a valid mobile number (10 digits).";
     }
     return "";
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     const errorMessage = validateInputs();
@@ -33,10 +48,19 @@ export const AdminLoginPage = () => {
     }
     setIsError(false);
     setErrorMessage("");
+    const payload = {};
+    if (mobileNumber.length === 10) {
+      payload.mobileNumber = mobileNumber;
+    } else {
+      payload.userName = username;
+      payload.password = password;
+    }
     if (mobileNumber.length === 10) {
       setOTPLogin(true);
+    } else {
+      dispatch(createLogin(payload));
     }
-    console.log("Submitting:", { username, password, mobileNumber, otp });
+    handleReset();
   };
 
   const handleReset = () => {
@@ -67,6 +91,33 @@ export const AdminLoginPage = () => {
         setErrorMessage("");
       }
     }
+  };
+
+  useEffect(() => {
+    getAllCookies();
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess && status === 200) {
+      const timeoutId = setTimeout(() => {
+        navigate("/admin-dashboard");
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isSuccess, status, navigate]);
+
+  useEffect(() => {
+    if (error?.isError || message) {
+      setShowToaster(true);
+      setShowToasterMesssage(message);
+    }
+  }, [error?.isError, message]);
+
+  const handleToasterClose = () => {
+    setShowToaster(false);
+    setShowToasterMesssage("");
+    dispatch(clearLoginMessage(""));
   };
 
   return (
@@ -117,7 +168,7 @@ export const AdminLoginPage = () => {
                 <input
                   type="number"
                   value={mobileNumber}
-                  onChange={handleMobileNumberChange} // Use custom handler
+                  onChange={handleMobileNumberChange}
                   className="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white placeholder-gray-500"
                   placeholder="Enter Mobile Number"
                 />
@@ -128,7 +179,7 @@ export const AdminLoginPage = () => {
                 <input
                   type="text"
                   value={otp}
-                  onChange={handleInputChange(setOtp)} // Use custom handler
+                  onChange={handleInputChange(setOtp)}
                   className="w-full p-2 border border-gray-600 rounded bg-gray-800 text-white placeholder-gray-500"
                   placeholder="One-Time Password"
                   required
@@ -166,6 +217,14 @@ export const AdminLoginPage = () => {
           />
         </div>
       </div>
+      {isToastVisible ? (
+        <Toaster
+          isFailure={error?.isError}
+          isSuccess={isSuccess}
+          message={toasterMessage || error?.message}
+          onClose={handleToasterClose}
+        />
+      ) : null}
     </div>
   );
 };

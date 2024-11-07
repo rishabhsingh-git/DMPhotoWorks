@@ -3,6 +3,7 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import {
   Home,
@@ -13,11 +14,19 @@ import {
   ManageAssets,
   AdminLoginPage,
 } from "./components/index";
+import { useEffect } from "react";
 
-const isLoggedIn = true;
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isAdminRoute = location.pathname.includes("/admin");
+  const userDetails = JSON.parse(localStorage.getItem("userDetails")) || {};
+
+  useEffect(() => {
+    if (userDetails.isAdmin && location.pathname === "/admin-signin") {
+      navigate("/admin-dashboard");
+    }
+  }, [userDetails.isAdmin, location.pathname, navigate, userDetails?.userId]);
 
   return (
     <div>
@@ -26,12 +35,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/about-contact" element={<AboutContact />} />
-        {false ? (
+        {userDetails.isAdmin ? (
           <Route path="/admin-dashboard" element={<Admin />}>
             <Route path="manage-assets" element={<ManageAssets />} />
           </Route>
         ) : (
-          <Route path="/admin-signin" element={<AdminLoginPage />}></Route>
+          <Route path="/admin-signin" element={<AdminLoginPage />} />
         )}
       </Routes>
     </div>

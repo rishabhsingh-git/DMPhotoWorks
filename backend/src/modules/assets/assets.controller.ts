@@ -7,15 +7,18 @@ import {
   Body,
   Get,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AssetsService } from './assets.service';
 import { getAllItemDto } from './dto/assets.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('assets')
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(

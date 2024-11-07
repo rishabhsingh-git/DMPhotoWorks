@@ -26,9 +26,8 @@ export class AuthService {
     }
 
 
-    async login(req: UsersDto, res: Response): Promise<LoginResponse> {
+    async login(req: UsersDto, res: Response): Promise<void> {
         try {
-
             const user = await this.validateUser(req.userName, req.password);
             if (!user) {
                 throw new UnauthorizedException(
@@ -39,29 +38,33 @@ export class AuthService {
                 );
             }
             const payload = { userName: user.userName, userId: user._id, number: user.number, isAdmin: user.isAdmin };
-            const token = this.jwtService.sign(payload);
+            const accessToken = this.jwtService.sign(payload, {
+                expiresIn: '15m',
+            });
+            const refreshToken = this.jwtService.sign(payload, {
+                expiresIn: '7d',
+            });
 
-
-            res.cookie('jwt', token, {
+            res.cookie('accessToken', accessToken, {
                 httpOnly: true,
-                secure: false,
-                maxAge: 1000 * 60 * 60 * 24,
+                secure: true,
+                maxAge: 15 * 60 * 1000,
+                sameSite: 'strict',
+            });
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000,
                 sameSite: 'strict',
             });
 
             res.status(HttpStatus.OK).json({
                 status: HttpStatus.OK,
                 message: 'Login Success!',
+                payload
             });
 
-            return {
-                status: HttpStatus.OK,
-                message: 'Login Success!',
-            };
-
-
         } catch (error) {
-            console.log(error)
             Logger.error('An unexpected error occurred while login! :', error);
             throw new HttpException(
                 {
@@ -73,5 +76,51 @@ export class AuthService {
             );
         }
     }
+
+    async refreshAccessToken(refreshAccessToken: string, res: Response): Promise<void> {
+        try {
+
+            if (!refreshAccessToken) {
+                throw new UnauthorizedException('No refresh token provided');
+            }
+
+            const payload = this.jwtService.verify(refreshAccessToken);
+            const newAccessToken = this.jwtService.sign(
+                {
+                    userName: payload.userName,
+                    userId: payload.userId,
+                    number: payload.number,
+                    isAdmin: payload.isAdmin,
+                },
+                { expiresIn: '15m' },
+            );
+
+
+            res.cookie('accessToken', newAccessToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 15 * 60 * 1000,
+                sameSite: 'strict',
+            });
+
+            res.status(HttpStatus.OK).json({
+                status: HttpStatus.OK,
+                message: 'Access token refreshed!',
+            });
+        } catch (error) {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+    }
+
+    async isUserExist(userName: string): Promise<boolean> {
+        const user = await this.usersService.findOne({ userName: userName });
+        if (user) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
+
+
 

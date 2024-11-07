@@ -100,7 +100,7 @@ const SideNavbar = () => {
             </li>
             <li>
               <a
-                href="/admin/manage-assets"
+                href="/admin-dashboard/manage-assets"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg

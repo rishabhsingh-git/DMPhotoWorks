@@ -7,5 +7,4 @@ export class UsersModel {
     isAdmin: boolean
     role: string
     updatedAt: Date
-
 }
