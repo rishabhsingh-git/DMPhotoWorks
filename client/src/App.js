@@ -15,6 +15,7 @@ import {
   AdminLoginPage,
 } from "./components/index";
 import { useEffect } from "react";
+import { setupInterceptors } from "./common/common";
 
 function App() {
   const location = useLocation();
@@ -28,6 +29,9 @@ function App() {
     }
   }, [userDetails.isAdmin, location.pathname, navigate, userDetails?.userId]);
 
+  useEffect(() => {
+    setupInterceptors(navigate);
+  }, []);
   return (
     <div>
       {!isAdminRoute && <Navbar />}

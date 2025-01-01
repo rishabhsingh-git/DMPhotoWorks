@@ -3,8 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { UsersDto } from '../users/dto/users.dto';
-import { LoginResponse } from './auth.interface';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 
 @Injectable()
@@ -77,24 +76,34 @@ export class AuthService {
         }
     }
 
-    async refreshAccessToken(refreshAccessToken: string, res: Response): Promise<void> {
+    async refreshAccessToken(req: Request, res: Response): Promise<void> {
         try {
 
-            if (!refreshAccessToken) {
+            const refreshToken = req.cookies['refreshToken'];
+            if (!refreshToken) {
                 throw new UnauthorizedException('No refresh token provided');
             }
 
-            const payload = this.jwtService.verify(refreshAccessToken);
+            const payload = this.jwtService.verify(refreshToken, {
+                secret: process.env.JWT_SECRET,
+            });
+
+            const user = await this.isUserExist(payload?.userName)
+
+            if (!user) {
+                throw new UnauthorizedException('User does not exist');
+            }
+
+            const userPayload = {
+                userName: payload.userName,
+                userId: payload.userId,
+                number: payload.number,
+                isAdmin: payload.isAdmin,
+            }
             const newAccessToken = this.jwtService.sign(
-                {
-                    userName: payload.userName,
-                    userId: payload.userId,
-                    number: payload.number,
-                    isAdmin: payload.isAdmin,
-                },
+                userPayload,
                 { expiresIn: '15m' },
             );
-
 
             res.cookie('accessToken', newAccessToken, {
                 httpOnly: true,
@@ -106,7 +115,9 @@ export class AuthService {
             res.status(HttpStatus.OK).json({
                 status: HttpStatus.OK,
                 message: 'Access token refreshed!',
+                userDetails: payload
             });
+
         } catch (error) {
             throw new UnauthorizedException('Invalid refresh token');
         }

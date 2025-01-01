@@ -16,14 +16,39 @@ export const getAllCookies = () => {
 
 export const setupInterceptors = (navigate) => {
   api.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
+    (response) => response,
+
+    async (error) => {
       if (error.response && error.response.status === 401) {
-        console.log(`You have been triggered`);
-        navigate("/admin-signin");
+        try {
+          const refreshResponse = await fetch(
+            "http://localhost:5000/api/auth/refresh-token",
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
+          const data = await refreshResponse.json();
+
+          if (refreshResponse.ok) {
+            localStorage.setItem(
+              "userDetails",
+              JSON.stringify(data.userDetails)
+            );
+            const originalRequest = error.config;
+            return api(originalRequest);
+          } else {
+            localStorage.removeItem("userDetails");
+            navigate("/admin-signin");
+            return Promise.reject(error);
+          }
+        } catch (refreshError) {
+          localStorage.removeItem("userDetails");
+          navigate("/admin-signin");
+          return Promise.reject(refreshError);
+        }
       }
+
       return Promise.reject(error);
     }
   );

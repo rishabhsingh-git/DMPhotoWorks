@@ -50,17 +50,17 @@ export class AssetsService {
         asset.save();
         return {
           status: 200,
-          message: "ASSET UPLOAD SUCCESS"
+          message: "Aseets upload success"
         }
       }
 
     } catch (error) {
-      Logger.error('ERROR WHILE UPLOADING ASSET TO CLOUD:', error);
+      Logger.error('Error while uploading assets to cloud:', error);
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error,
-          message: "ERROR WHILE UPL0DAING ASSET TO CLOUD"
+          message: "Error while uploading assets to cloud"
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -89,12 +89,12 @@ export class AssetsService {
       return this.assetsModel.find(filter).lean().exec();
 
     } catch (error) {
-      Logger.error('ERROR WHILE FETCHING ASSETS:', error);
+      Logger.error('Error while fetching the assets', error);
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error,
-          message: "ERROR WHILE FETCHING ASSETS"
+          message: "Error while fetching the assets"
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

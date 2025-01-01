@@ -101,7 +101,7 @@ export const AdminLoginPage = () => {
     if (isSuccess && status === 200) {
       const timeoutId = setTimeout(() => {
         navigate("/admin-dashboard");
-      }, 300);
+      }, 600);
 
       return () => clearTimeout(timeoutId);
     }
