@@ -24,6 +24,16 @@ function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails")) || {};
 
   useEffect(() => {
+    if (location.pathname === "/") {
+      document.body.classList.add("home-page-background");
+    } else if (location.pathname === "/portfolio") {
+      document.body.classList.add("portfolio-page-background");
+    } else {
+      document.body.classList.remove("home-page-background");
+    }
+  }, [location]);
+
+  useEffect(() => {
     if (userDetails.isAdmin && location.pathname === "/admin-signin") {
       navigate("/admin-dashboard");
     }

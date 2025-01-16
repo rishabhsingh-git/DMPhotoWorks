@@ -4,7 +4,7 @@ import HomegridImages from "../HomegridImages/HomegridImages";
 
 const Home = () => {
   return (
-    <div>
+    <div style={{ marginTop: "100vh" }}>
       <Carousel />
       <HomegridImages />
     </div>

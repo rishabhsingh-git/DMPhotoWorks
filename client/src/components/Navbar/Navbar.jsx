@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DMLogo from "../../assets/DMLogo.png";
 import { useNavigate } from "react-router-dom";
+import backgroundCover from "../../assets/HomeCover.webp"; // Assuming you rename HomeCover to backgroundCover
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ const Navbar = () => {
       false ? navigate("/admin-dashboard") : navigate("/admin-signin");
     }
   };
+
   return (
     <div className="relative z-50">
       <nav className="flex flex-col md:flex-row items-center justify-between p-4">
@@ -59,7 +61,7 @@ const Navbar = () => {
               <button
                 key={index}
                 type="button"
-                className="text-white bg-gray-800 rounded-full"
+                className="text-black bg-white rounded-full border border-black"
                 style={{
                   padding: "8px 16px",
                   fontSize: "14px",

@@ -28,6 +28,7 @@ export const uploadAssets = createAsyncThunk(
 export const fetchAllAssets = createAsyncThunk(
   "assets/fetchAll",
   async (query, { rejectWithValue }) => {
+    console.log(` In the query you have been claeed`, query);
     try {
       const response = await api.get("api/assets/", {
         params: query,

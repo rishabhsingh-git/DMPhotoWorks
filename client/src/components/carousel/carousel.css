@@ -2,25 +2,34 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: 40px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  height: 100vh;
 }
 
-.carousel-inner {
-  position: relative; /* Ensure fading works properly */
-  transition: opacity 0.3s ease; /* Match this with the JavaScript timeout */
-}
-
-.carousel-inner.fading {
-  opacity: 0; /* Fades out when changing slides */
+.carousel-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 2000px;
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
 }
 
 .carousel-image {
-  width: 100%;
-  height: 100vh;
-  object-fit: "";
+  position: absolute;
+  width: 45%;
+  height: 55%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transform-style: preserve-3d;
+  transition: transform 1s ease, opacity 0.5s ease;
+}
+
+.carousel-3d.rotate {
+  transform: rotateY(360deg);
 }
 
 .carousel-button {

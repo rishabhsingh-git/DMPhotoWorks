@@ -1,0 +1,185 @@
+.vintage-portfolio {
+  font-family: "Georgia", serif;
+  padding: 20px 50px 50px 50px;
+  border: 5px solid #f7f0eb;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.vintage-header {
+  top: 3%;
+  left: 40%;
+  transform: translateX(-50%);
+  position: absolute;
+}
+
+.vintage-header h1 {
+  font-family: "Cinzel", serif;
+  font-size: 4rem;
+  color: #5c3d36;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.vintage-header p {
+  font-family: "Georgia", serif;
+  font-size: 1.3rem;
+  color: #5c3d36;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.portfolio-cards {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  margin-top: 5%;
+}
+
+.portfolio-card {
+  width: 300px;
+  height: 300px;
+  background-size: cover;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: stackAnimation 0.8s ease-in-out forwards;
+}
+
+.portfolio-card:hover {
+  transform: scale(1.05) rotate(3deg);
+  box-shadow: 0px 8px 25px rgba(26, 24, 24, 0.4),
+    0px 4px 15px rgba(211, 204, 204, 0.6);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  transition: transform 0.5s ease, filter 0.5s ease;
+  filter: sepia(0.2);
+}
+
+.portfolio-card:hover .card-image {
+  transform: scale(1.1) rotate(1deg);
+  filter: sepia(0.3);
+}
+
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.63);
+  color: #5c3d36;
+  text-align: center;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.portfolio-card:hover .card-overlay {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.card-title {
+  font-size: 1.6rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+/* ImageGallery.css */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Adjusted for better responsiveness */
+  grid-gap: 26px; /* Space between items */
+  padding: 5%;
+  transition: all 0.3s ease; /* Smooth transition for layout changes */
+  background: #ffffff;
+}
+
+.grid-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.507);
+  background: #000000; /* Add a background color for better contrast */
+  transition: transform 0.3s ease; /* Animation for scaling effect */
+}
+
+.grid-item:hover {
+  transform: scale(1.05); /* Scale up on hover */
+}
+
+.grid-item img {
+  width: 100%;
+  height: 100%; /* Adjusted to allow for responsive image sizing */
+  display: block;
+  border-radius: 12px;
+  object-fit: contain; /* Changed to cover for better image display */
+  transition: transform 0.3s ease; /* Animation on image hover */
+}
+
+.grid-item:hover img {
+  transform: scale(1.1); /* Image scaling effect on hover */
+}
+
+@keyframes stackAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.portfolio-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.portfolio-card:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.portfolio-card:nth-child(4) {
+  animation-delay: 0.8s;
+}
+.portfolio-card:nth-child(5) {
+  animation-delay: 1s;
+}
+.portfolio-card:nth-child(6) {
+  animation-delay: 1.2s;
+}
+
+@media screen and (max-width: 768px) {
+  .vintage-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .vintage-header p {
+    font-size: 1.1rem;
+  }
+
+  .portfolio-cards {
+    gap: 15px;
+  }
+
+  .portfolio-card {
+    width: 100%;
+    height: auto;
+  }
+}

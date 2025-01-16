@@ -8,6 +8,7 @@ import "./carousel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllAssets, clearUploadStatus } from "../../store/assetsReducer";
 import { Toaster, Skeleton } from "../../shared/index";
+import { CATEGORY_CONSTANTS_PORTFOLIO } from "../../common/constant";
 
 const Carousel = ({ autoScroll = true, interval = 2000 }) => {
   const [isToastVisible, setShowToaster] = useState(false);
@@ -18,38 +19,36 @@ const Carousel = ({ autoScroll = true, interval = 2000 }) => {
     useSelector((state) => state.assets);
 
   let filteredData = assetsData?.filter(
-    (val) => val?.category === "Carousel Image"
+    (val) => val?.category === CATEGORY_CONSTANTS_PORTFOLIO.carousel_image
   );
 
   useEffect(() => {
-    dispatch(fetchAllAssets({ category: ["Carousel Image", "Home Screen"] }));
+    dispatch(
+      fetchAllAssets({
+        category: [
+          CATEGORY_CONSTANTS_PORTFOLIO.carousel_image,
+          CATEGORY_CONSTANTS_PORTFOLIO.home_screen,
+        ],
+      })
+    );
   }, [dispatch]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFading, setIsFading] = useState(false);
-
-  const changeImage = (newIndex) => {
-    setIsFading(true);
-    setTimeout(() => {
-      setCurrentIndex(newIndex);
-      setIsFading(false);
-    }, 300);
-  };
 
   const goToPrevious = () => {
     const newIndex =
       currentIndex === 0 ? filteredData.length - 1 : currentIndex - 1;
-    changeImage(newIndex);
+    setCurrentIndex(newIndex);
   };
 
   const goToNext = () => {
     const newIndex =
       currentIndex === filteredData.length - 1 ? 0 : currentIndex + 1;
-    changeImage(newIndex);
+    setCurrentIndex(newIndex);
   };
 
   const goToSlide = (slideIndex) => {
-    changeImage(slideIndex);
+    setCurrentIndex(slideIndex);
   };
 
   useEffect(() => {
@@ -82,12 +81,28 @@ const Carousel = ({ autoScroll = true, interval = 2000 }) => {
     <div>
       {!renderLoading() && assetsData?.length ? (
         <div className="carousel">
-          <div className={`carousel-inner ${isFading ? "fading" : ""}`}>
-            <img
-              src={filteredData[currentIndex]?.url}
-              alt="carousel"
-              className="carousel-image"
-            />
+          <div
+            className="carousel-3d"
+            style={{
+              transform: `rotateY(${
+                -currentIndex * (360 / filteredData.length)
+              }deg)`,
+            }}
+          >
+            {filteredData.map((item, index) => {
+              const angle = (360 / filteredData.length) * index;
+              return (
+                <img
+                  key={index}
+                  src={item.url}
+                  alt="carousel"
+                  className="carousel-image"
+                  style={{
+                    transform: `rotateY(${angle}deg) translateZ(1000px)`,
+                  }}
+                />
+              );
+            })}
           </div>
           <button
             onClick={goToPrevious}
@@ -114,7 +129,7 @@ const Carousel = ({ autoScroll = true, interval = 2000 }) => {
           </div>
         </div>
       ) : (
-        <Skeleton width={"100%"} height={"100vh"} borderRadius={"40px"} />
+        <Skeleton width={"100%"} height={"100vh"} />
       )}
       {isToastVisible ? (
         <Toaster
