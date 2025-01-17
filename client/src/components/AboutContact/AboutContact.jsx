@@ -11,11 +11,7 @@ const AboutContact = () => {
           alt="Author"
           className="author-image"
         />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-          lacinia odio vitae vestibulum. Sed sit amet accumsan arcu, in gravida
-          nulla. Proin quis tortor eget elit sagittis pretium.
-        </p>
+        <p>nulla. Proin quis tortor eget elit sagittis pretium.</p>
       </div>
 
       <div className="contact-section">
