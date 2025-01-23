@@ -2,15 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Your global styles here */
+/* index.css */
 body {
-  margin: 0px 50px 50px 50px;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(255, 249, 249);
+  background-color: whitesmoke;
+  background-size: cover; /* Ensures the image covers the entire container */
+  background-repeat: no-repeat; /* Prevents image repetition */
+  background-position: center; /* Centers the image in the container */
+  height: 100vh; /* Full viewport height */
+}
+
+.home-page-background {
+  background-image: url("assets/HomeCover.png");
+  margin-bottom: 195px;
 }
 
 @media (max-width: 768px) {

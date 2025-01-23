@@ -1,34 +1,52 @@
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Responsive columns */
   gap: 20px;
-  padding: 20px;
+  padding: 50px;
+  background-color: #f0f0f0; /* Light background to simulate a wall */
 }
 
 .image-grid-item {
   position: relative;
   overflow: hidden;
   border: 10px solid transparent;
-  border-radius: 1px;
-  border-color: rgb(255, 255, 255);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* Rounded corners */
+  border-color: rgba(255, 255, 255, 0.8); /* Soft white border */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow for depth */
   opacity: 0; /* Initially hidden */
-  transform: translateY(100px); /* Start from below */
+  transform: translateY(50px); /* Start from a closer position */
   transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.image-grid-item:before {
+  content: "";
+  position: absolute;
+  top: -10px; /* Adjust to create a frame effect */
+  left: -10px; /* Adjust to create a frame effect */
+  right: -10px; /* Adjust to create a frame effect */
+  bottom: -10px; /* Adjust to create a frame effect */
+  background: rgba(255, 255, 255, 0.9); /* Background for the frame */
+  border-radius: 12px; /* Slightly larger radius for the frame */
+  z-index: -1; /* Place behind the image */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Shadow for the frame */
 }
 
 .image-grid-item img {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   transition: transform 0.3s ease;
+  object-fit: contain; /* Cover to fill the item */
 }
 
 .image-grid-item:hover img {
-  transform: scale(1.05);
+  transform: scale(1.05); /* Scale effect on hover */
 }
 
 .image-grid-item:hover {
-  border-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.5); /* Darker border on hover */
 }
 
 /* Animation when in view */
@@ -39,6 +57,6 @@
 
 @media (max-width: 600px) {
   .image-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Single column for small screens */
   }
 }

@@ -6,6 +6,7 @@ export const uploadAssets = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await api.post("api/assets/upload", formData, {
+        withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -27,6 +28,7 @@ export const uploadAssets = createAsyncThunk(
 export const fetchAllAssets = createAsyncThunk(
   "assets/fetchAll",
   async (query, { rejectWithValue }) => {
+    console.log(` In the query you have been claeed`, query);
     try {
       const response = await api.get("api/assets/", {
         params: query,

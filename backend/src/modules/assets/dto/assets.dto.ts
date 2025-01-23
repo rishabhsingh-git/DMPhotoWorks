@@ -14,12 +14,26 @@ export class AssetsDto {
   fileType: string;
 
   @IsNotEmpty()
-  @IsEnum(['Home', 'Wedding', 'Birthday', 'Pre-Wedding', 'Outdoor'])
+  @IsEnum([
+    'Home Screen',
+    'Carousel Image',
+    'Wedding',
+    'Pre-Wedding',
+    'Birthday',
+    'Maternity',
+    'Outdoor',
+    'Model',
+    'Wedding Cover',
+    'Pre-Wedding Cover',
+    'Birthday Cover',
+    'Maternity Cover',
+    'Outdoor Cover',
+    'Model Cover',
+  ])
   category: string;
 
   title: string;
 }
-
 
 export class getAllItemDto {
   @IsNotEmpty()

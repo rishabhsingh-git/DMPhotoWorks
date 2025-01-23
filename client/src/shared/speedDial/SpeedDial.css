@@ -1,0 +1,20 @@
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100%,
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px); /* Increased bounce height */
+  }
+  60% {
+    transform: translateY(-7px); /* Slightly increased secondary bounce */
+  }
+}
+
+.bounce {
+  animation: bounce 1s ease infinite; /* Animation properties with infinite repeat */
+}

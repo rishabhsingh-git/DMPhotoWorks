@@ -6,6 +6,8 @@ import Admin from "./Admin/Admin";
 import SideNavbar from "./Sidebar/SideNavbar";
 import ManageAssets from "./ManageAssets/ManageAssets";
 import HomegridImages from "./HomegridImages/HomegridImages";
+import Carousel from "./carousel/Carousel";
+import { AdminLoginPage } from "./AdminLogin/AdminLoginPage";
 
 export {
   Home,
@@ -16,4 +18,6 @@ export {
   SideNavbar,
   ManageAssets,
   HomegridImages,
+  Carousel,
+  AdminLoginPage,
 };

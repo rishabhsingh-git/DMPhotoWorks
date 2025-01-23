@@ -8,5 +8,5 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
     }),
   ],
 })
-export class AppConfigModule {}
+export class AppConfigModule { }
 
